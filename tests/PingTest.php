@@ -1,11 +1,7 @@
 <?php
 
-namespace Pifeifei;
-
 use PHPUnit\Framework\TestCase;
 
-// TO DO - Use autoloading someday.
-//include_once('Ping.php');
 use Pifeifei\Ping as Ping;
 
 class PingTest extends TestCase
@@ -21,8 +17,9 @@ class PingTest extends TestCase
         $this->assertEquals($first, $ping->getHost());
 
         $second = 'www.apple.com';
-        $ping->setHost($second);
+        $ping->setHost($second)->setPort(80);
         $this->assertEquals($second, $ping->getHost());
+        $this->assertEquals(80, $ping->getPort());
     }
 
     public function testTtl()
@@ -43,7 +40,6 @@ class PingTest extends TestCase
         $ping      = new Ping($this->unreachable_host, 255, $timeout);
         $ping->ping('exec');
         $time = floor(microtime(TRUE) - $startTime);
-        echo "timeout: {$timeout}, time: {$time}";
         $this->assertLessThanOrEqual($timeout, $time);
     }
 
@@ -105,6 +101,7 @@ class PingTest extends TestCase
      */
     public function testPingSocket()
     {
+        echo $this->reachable_host.PHP_EOL;
         $ping    = new Ping($this->reachable_host);
         $latency = $ping->ping('socket');
         $this->assertNotEquals(FALSE, $latency);
