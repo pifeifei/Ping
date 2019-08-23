@@ -2,3 +2,5 @@ vendor
 /.buildpath
 /.project
 /.settings
+/.idea
+.phpunit.result.cache
