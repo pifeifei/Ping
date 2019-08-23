@@ -1,6 +1,11 @@
 {
     "name": "pifeifei/ping",
     "description": "A PHP class to ping hosts.",
+    "type": "library",
+    "keywords": [
+        "ping",
+        "php-ping"
+    ],
     "license": "MIT",
     "authors": [
         {
