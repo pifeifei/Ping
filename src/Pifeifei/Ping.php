@@ -198,7 +198,6 @@ class Ping
      */
     public function ping($method = 'exec')
     {
-        $latency = FALSE;
         if(empty($this->host)){
             throw new Exception('Error: Host name not supplied.');
         }
@@ -242,7 +241,7 @@ class Ping
         // Exec string for Windows-based systems.
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             // -n = number of pings; -i = ttl; -w = timeout (in milliseconds).
-            $exec_string = 'ping -n 1 -i ' . $ttl . ' -w ' . ($timeout * 1000) . ' ' . $host;
+            $exec_string = 'chcp 437 && ping -n 1 -i ' . $ttl . ' -w ' . ($timeout * 1000) . ' ' . $host;
         } // Exec string for Darwin based systems (OS X).
         else if (strtoupper(PHP_OS) === 'DARWIN') {
             // -n = numeric output; -c = number of pings; -m = ttl; -t = timeout.
@@ -263,7 +262,7 @@ class Ping
         // If the result line in the output is not empty, parse it.
         if (!empty($output[1])) {
             // Search for a 'time' value in the result line.
-            $response = preg_match("/time(?:=|<)(?<time>[\.0-9]+)(?:|\s)ms/", $output[1], $matches);
+            $response = preg_match("/time(?:=|<)(?<time>[\.0-9]+)(?:|\s)ms/", $output[1].$output[2], $matches);
 
             // If there's a result and it's greater than 0, return the latency.
             if ($response > 0 && isset($matches['time'])) {
