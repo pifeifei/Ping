@@ -1,14 +1,26 @@
 {
-    "name": "geerlingguy/ping",
+    "name": "pifeifei/ping",
     "description": "A PHP class to ping hosts.",
     "license": "MIT",
     "authors": [
+        {
+            "name": "kislong",
+            "email": "pifeifei1989@qq.com"
+        },
         {
             "name": "Jeff Geerling",
             "email": "jeff@jeffgeerling.com"
         }
     ],
+    "require": {
+        "ext-sockets": "*"
+    },
     "autoload": {
-        "classmap": [ "JJG/Ping.php" ]
+        "psr-4": {
+            "Pifeifei\\": "src/Pifeifei"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3"
     }
 }
