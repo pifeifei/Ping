@@ -39,8 +39,7 @@ class Ping
     /**
      * Called when the Ping object is created.
      *
-     * @param string $host
-     *   The host to be pinged.
+     * @param string $host   The host to be pinged.
      * @param int $ttl
      *   Time-to-live (TTL) (You may get a 'Time to live exceeded' error if this
      *   value is set too low. The TTL value indicates the scope or range in which
@@ -51,10 +50,9 @@ class Ping
      *     - 64 = same region
      *     - 128 = same continent
      *     - 255 = unrestricted
-     * @param int $timeout
-     *   Timeout (in seconds) used for ping and fsockopen().
+     * @param int $timeout   Timeout (in seconds) used for ping and fsockopen().
      */
-    public function __construct($host = "", $ttl = 255, $timeout = 10)
+    public function __construct($host = "", $ttl = 255, $timeout = 3)
     {
         $this->host    = $host;
         $this->ttl     = $ttl;
@@ -64,8 +62,7 @@ class Ping
     /**
      * Get the ttl.
      *
-     * @return int
-     *   The current ttl for Ping.
+     * @return int  The current ttl for Ping.
      */
     public function getTtl()
     {
@@ -75,19 +72,20 @@ class Ping
     /**
      * Set the ttl (in hops).
      *
-     * @param int $ttl
-     *   TTL in hops.
+     * @param int $ttl  TTL in hops.
+     *
+     * @return $this
      */
     public function setTtl($ttl)
     {
         $this->ttl = $ttl;
+        return $this;
     }
 
     /**
      * Get the timeout.
      *
-     * @return int
-     *   Current timeout for Ping.
+     * @return int  Current timeout for Ping.
      */
     public function getTimeout()
     {
@@ -97,12 +95,13 @@ class Ping
     /**
      * Set the timeout.
      *
-     * @param int $timeout
-     *   Time to wait in seconds.
+     * @param int $timeout  Time to wait in seconds.
+     * @return $this
      */
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+        return $this;
     }
 
     /**
@@ -119,19 +118,20 @@ class Ping
     /**
      * Set the host.
      *
-     * @param string $host
-     *   Host name or IP address.
+     * @param string $host   Host name or IP address.
+     *
+     * @return $this
      */
     public function setHost($host)
     {
         $this->host = $host;
+        return $this;
     }
 
     /**
      * Get the port (only used for fsockopen method).
      *
-     * @return int
-     *   The port used by fsockopen pings.
+     * @return int  The port used by fsockopen pings.
      */
     public function getPort()
     {
@@ -147,10 +147,14 @@ class Ping
      *
      * @param int $port
      *   Port to use for fsockopen ping (defaults to 80 if not set).
+     *
+     * @return $this
      */
     public function setPort($port)
     {
         $this->port = $port;
+
+        return $this;
     }
 
     /**
@@ -225,8 +229,7 @@ class Ping
      * the input to the system. This is potentially VERY dangerous if you pass in
      * any user-submitted data. Be SURE you sanitize your inputs!
      *
-     * @return float
-     *   Latency, in ms.
+     * @return float  Latency, in ms.
      */
     private function pingExec()
     {
@@ -323,7 +326,7 @@ class Ping
         // Create a socket, connect to server, then read socket and calculate.
         if ($socket = socket_create(AF_INET, SOCK_RAW, 1)) {
             socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, [
-                'sec' => 10,
+                'sec' => $this->timeout,
                 'usec' => 0,
             ]);
             // Prevent errors from being printed when host is unreachable.
