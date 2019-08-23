@@ -4,3 +4,4 @@ vendor
 /.settings
 /.idea
 .phpunit.result.cache
+composer.lock
