@@ -16,7 +16,9 @@ This is a very simple class. Just create an instance, and run `ping()`.
 
 ```php
 $host = 'www.example.com';
-$ping = new Ping($host);
+$ttl = 128;
+$timeout = 5;
+$ping = new Ping($host, $ttl, $timeout);
 $latency = $ping->ping();
 if ($latency !== false) {
   print 'Latency is ' . $latency . ' ms';
@@ -26,34 +28,26 @@ else {
 }
 ```
 
-You can also specify the ttl (maximum hops) and timeout when creating the instance:
+...or using the `setHost()`, `setTtl()`, `setTimeout()` or `setPort()` methods:
 
 ```php
-$ttl = 128;
-$timeout = 5;
-$ping = new Ping($host, $ttl, $timeout);
+$ping = new Ping();
+$ping->setHost($host)
+     ->setTtl(128)
+     ->setTimeout(5)
+     ->setPort(80)
+     ->ping();
 ```
 
-...or using the `setTtl()` or `setTimeout()` methods:
+You can also use it as a function call:
 
 ```php
-$ping = new Ping($host);
-$ping->setTtl(128);
-$ping->setTimeout(5);
-```
-
-You can change the host using the `setHost()` method:
-
-```php
-$ping = new Ping($host);
+$ping = new Ping();
 ...
-$ping->setHost('www.anotherexample.com');
+$ping('www.anotherexample.com');
+$ping('example2.com');
 ```
 
 ## License
 
 Ping is licensed under the MIT (Expat) license. See included LICENSE.md.
-
-## Author
-
-Ping is maintained by [Jeff Geerling](https://www.jeffgeerling.com), and is used to check servers for [Server Check.in](https://servercheck.in), an inexpensive website and server uptime monitoring service.
