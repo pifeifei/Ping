@@ -199,7 +199,7 @@ class Ping
     public function ping($method = 'exec')
     {
         if(empty($this->host)){
-            throw new Exception('Error: Host name not supplied.');
+            throw new Exception('Error: Host name not supplied.', -1);
         }
 
         switch ($method) {
@@ -216,7 +216,7 @@ class Ping
                 break;
 
             default:
-                throw new InvalidArgumentException('Unsupported ping method.');
+                throw new InvalidArgumentException('Unsupported ping method.', -2);
         }
 
         // Return the latency.
@@ -370,5 +370,13 @@ class Ping
         }
 
         return pack('n*', ~$sum);
+    }
+
+    public function __invoke($host = '', $ttl = 255, $timeout = 3, $method = "fsockopen")
+    {
+        $this->host    = $host;
+        $this->ttl     = $ttl;
+        $this->timeout = $timeout;
+        return $this->ping($method);
     }
 }
