@@ -286,11 +286,12 @@ class Ping
 
             // If there's a result and it's greater than 0, return the latency.
             if ($response > 0 && isset($matches['time'])) {
+                /** @var float $latency */
                 $latency = round($matches['time'], 4);
             }
         }
 
-        return $latency; // @phpstan-ignore-line
+        return $latency;
     }
 
     /**
@@ -340,6 +341,7 @@ class Ping
         $package = $type . $code . $checksum . $identifier . $seq_number . $this->data;
 
         // Create a socket, connect to server, then read socket and calculate.
+        // Note: Sudo permission is required to execute PHPUnit tests.
         if ($socket = socket_create(AF_INET, SOCK_RAW, 1)) {
             socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, [
                 'sec' => $this->timeout,
