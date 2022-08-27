@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Ping for PHP.
  *
@@ -30,12 +32,12 @@ use InvalidArgumentException;
 
 class Ping
 {
-    private $host;
-    private $ttl;
-    private $timeout;
-    private $port = 80;
-    private $data = 'Ping';
-    private $commandOutput;
+    private string $host;
+    private int $ttl;
+    private int $timeout;
+    private int $port = 80;
+    private string $data = 'Ping';
+    private string $commandOutput;
 
     /**
      * Called when the Ping object is created.
@@ -53,7 +55,7 @@ class Ping
      *                 - 255 = unrestricted
      * @param int $timeout timeout (in seconds) used for ping and fsockopen()
      */
-    public function __construct($host = '', $ttl = 255, $timeout = 3)
+    public function __construct(string $host = '', int $ttl = 255, int $timeout = 3)
     {
         $this->host = $host;
         $this->ttl = $ttl;
@@ -61,14 +63,9 @@ class Ping
     }
 
     /**
-     * @param string $host
-     * @param int $ttl
-     * @param int $timeout
-     * @param string $method
-     *
      * @throws Exception
      */
-    public function __invoke($host = '', $ttl = 255, $timeout = 3, $method = 'fsockopen')
+    public function __invoke(string $host = '', int $ttl = 255, int $timeout = 3, string $method = 'fsockopen'): ?float
     {
         $this->host = $host;
         $this->ttl = $ttl;
@@ -82,7 +79,7 @@ class Ping
      *
      * @return int the current ttl for Ping
      */
-    public function getTtl()
+    public function getTtl(): int
     {
         return $this->ttl;
     }
@@ -94,7 +91,7 @@ class Ping
      *
      * @return $this
      */
-    public function setTtl($ttl)
+    public function setTtl(int $ttl): self
     {
         $this->ttl = $ttl;
 
@@ -106,7 +103,7 @@ class Ping
      *
      * @return int current timeout for Ping
      */
-    public function getTimeout()
+    public function getTimeout(): int
     {
         return $this->timeout;
     }
@@ -118,7 +115,7 @@ class Ping
      *
      * @return $this
      */
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): self
     {
         $this->timeout = $timeout;
 
@@ -131,7 +128,7 @@ class Ping
      * @return string
      *                The current hostname for Ping
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -143,7 +140,7 @@ class Ping
      *
      * @return $this
      */
-    public function setHost($host)
+    public function setHost(string $host): self
     {
         $this->host = $host;
 
@@ -155,7 +152,7 @@ class Ping
      *
      * @return int the port used by fsockopen pings
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
@@ -172,7 +169,7 @@ class Ping
      *
      * @return $this
      */
-    public function setPort($port)
+    public function setPort(int $port): self
     {
         $this->port = $port;
 
@@ -182,7 +179,7 @@ class Ping
     /**
      * Return the command output when method=exec.
      */
-    public function getCommandOutput()
+    public function getCommandOutput(): string
     {
         return $this->commandOutput;
     }
@@ -192,7 +189,7 @@ class Ping
      *
      * @return string
      */
-    public function getIpAddress()
+    public function getIpAddress(): ?string
     {
         $out = [];
         if (preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $this->commandOutput, $out)) {
@@ -218,7 +215,7 @@ class Ping
      *
      * @return float Latency as float, in ms, if host is reachable or null if host is down
      */
-    public function ping($method = 'exec')
+    public function ping(string $method = 'exec'): ?float
     {
         if (empty($this->host)) {
             throw new Exception('Error: Host name not supplied.', -1);
@@ -255,7 +252,7 @@ class Ping
      *
      * @return float latency, in ms
      */
-    private function pingExec()
+    private function pingExec(): ?float
     {
         $latency = null;
 
@@ -285,7 +282,7 @@ class Ping
         // If the result line in the output is not empty, parse it.
         if (!empty($output[1])) {
             // Search for a 'time' value in the result line.
-            $response = preg_match('/time[=<](?<time>[.0-9]+)(?:|\\s)ms/', $output[1] . $output[2], $matches);
+            $response = preg_match('/time[<=](?<time>[.0-9]+)(?:|\\s)ms/', $output[1] . $output[2], $matches);
 
             // If there's a result and it's greater than 0, return the latency.
             if ($response > 0 && isset($matches['time'])) {
@@ -303,7 +300,7 @@ class Ping
      *
      * @return float Latency, in ms
      */
-    private function pingFsockopen()
+    private function pingFsockopen(): ?float
     {
         $start = microtime(true);
         // fsockopen prints a bunch of errors if a host is unreachable. Hide those
@@ -326,7 +323,7 @@ class Ping
      *
      * @return float Latency, in ms
      */
-    private function pingSocket()
+    private function pingSocket(): ?float
     {
         // Create a package.
         $type = "\x08";
@@ -378,7 +375,7 @@ class Ping
      * @return string
      *                Binary string checksum of $data
      */
-    private function calculateChecksum($data)
+    private function calculateChecksum(string $data): string
     {
         if (\strlen($data) % 2) {
             $data .= "\x00";

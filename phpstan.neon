@@ -1,0 +1,26 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: max
+    bootstrapFiles:
+        - vendor/autoload.php
+    paths:
+        - src
+    excludePaths:
+        analyse:
+            - tests/stubs/*
+            - tests/*/stubs/*
+            - tests/*/*/stubs/*
+            - tests/*/*/*/stubs/*
+    inferPrivatePropertyTypeFromConstructor: true
+    checkMissingIterableValueType: true
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: true
+#    checkUnionTypes: false # Method Foo::bar() should return int|string but returns bool|int
+#    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+#    ignoreErrors:
+#        - "#Access to undefined constant Illuminate#"
+#        - "#Call to an undefined (static )?method Illuminate#"
+#        - "#Cannot call method environment\\(\\) on mixed#"
