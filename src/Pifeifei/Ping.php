@@ -287,7 +287,7 @@ class Ping
             // If there's a result and it's greater than 0, return the latency.
             if ($response > 0 && isset($matches['time'])) {
                 /** @var float $latency */
-                $latency = round($matches['time'], 4);
+                $latency = round((float) $matches['time'], 4);
             }
         }
 
