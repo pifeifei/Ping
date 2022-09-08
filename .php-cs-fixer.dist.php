@@ -39,6 +39,7 @@ $config
         'phpdoc_order' => true,
         // 'phpdoc_summary' => true, // 中文注释使用中文句号
         'phpdoc_to_comment' => ['ignored_tags' => ['todo', 'var']],
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
     ])
     ->setFinder($finder)
 ;

@@ -19,25 +19,28 @@ final class PingTest extends TestCase
     {
         $first = $this->reachable_host;
         $ping = new Ping($first);
-        static::assertSame($first, $ping->getHost());
+        $this->assertSame($first, $ping->getHost());
 
         $second = 'www.apple.com';
         $ping->setHost($second)->setPort(80);
-        static::assertSame($second, $ping->getHost());
-        static::assertSame(80, $ping->getPort());
+        $this->assertSame($second, $ping->getHost());
+        $this->assertSame(80, $ping->getPort());
     }
 
     public function testTtl(): void
     {
         $first = 220;
         $ping = new Ping($this->reachable_host, $first);
-        static::assertSame($first, $ping->getTtl());
+        $this->assertSame($first, $ping->getTtl());
 
         $second = 128;
         $ping->setTtl($second);
-        static::assertSame($second, $ping->getTtl());
+        $this->assertSame($second, $ping->getTtl());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testTimeout(): void
     {
         $timeout = 5;
@@ -45,16 +48,19 @@ final class PingTest extends TestCase
         $ping = new Ping($this->unreachable_host, 255, $timeout);
         $ping->ping('exec');
         $time = floor(microtime(true) - $startTime);
-        static::assertLessThanOrEqual($timeout, $time);
+        $this->assertLessThanOrEqual($timeout, $time);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testLowLatencyHost(): void
     {
         $low_latency = $this->low_latency_host;
         $ping = new Ping($low_latency);
 //        $ping->ping(); // method = exec
         $latency = $ping->ping();
-        static::assertGreaterThan(0, $latency);
+        $this->assertGreaterThan(0, $latency);
     }
 
     public function testPort(): void
@@ -62,43 +68,55 @@ final class PingTest extends TestCase
         $port = 2222;
         $ping = new Ping($this->reachable_host);
         $ping->setPort($port);
-        static::assertSame($port, $ping->getPort());
+        $this->assertSame($port, $ping->getPort());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetCommandOutput(): void
     {
         $ping = new Ping('127.0.0.1');
-        $latency = $ping->ping('exec');
-        static::assertNotNull($ping->getCommandOutput());
+        $latency = $ping->ping();
+        $this->assertNotNull($ping->getCommandOutput());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testIpAddress(): void
     {
         $ping = new Ping('127.0.0.1');
-        $ping->ping('exec');
-        static::assertSame('127.0.0.1', $ping->getIpAddress());
+        $ping->ping();
+        $this->assertSame('127.0.0.1', $ping->getIpAddress());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testPingExec(): void
     {
         $ping = new Ping($this->reachable_host);
-        $latency = $ping->ping('exec');
-        static::assertNotFalse($latency);
+        $latency = $ping->ping();
+        $this->assertNotFalse($latency);
 
         $ping->setHost($this->unreachable_host);
-        $latency = $ping->ping('exec');
-        static::assertNull($latency);
+        $latency = $ping->ping();
+        $this->assertNull($latency);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testPingFsockopen(): void
     {
         $ping = new Ping($this->reachable_host);
         $latency = $ping->ping('fsockopen');
-        static::assertNotFalse($latency);
+        $this->assertNotFalse($latency);
 
         $ping = new Ping($this->unreachable_host);
         $latency = $ping->ping('fsockopen');
-        static::assertNull($latency);
+        $this->assertNull($latency);
     }
 
     /**
@@ -108,7 +126,7 @@ final class PingTest extends TestCase
      */
     public function testPingSocket(): void
     {
-        static::assertTrue(true);
+        $this->assertTrue(true);
 
         // Note: Sudo permission is required to execute PHPUnit tests.
         // $ping = new Ping($this->reachable_host);

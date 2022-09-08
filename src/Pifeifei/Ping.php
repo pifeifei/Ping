@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * This class pings a host.
  *
- * The ping() method pings a server using 'exec', 'socket', or 'fsockopen', and
+ * The ping() method pings a server using 'exec', 'socket', or 'fsockopen',
  * and returns FALSE if the server is unreachable within the given ttl/timeout,
  * or the latency in milliseconds if the server is reachable.
  *
@@ -19,8 +19,6 @@ declare(strict_types=1);
  *   $ping = new Ping('www.example.com');
  *   $latency = $ping->ping();
  * @endcode
- *
- * @version 1.2.1
  *
  * @author Jeff Geerling.
  */
